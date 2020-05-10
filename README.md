@@ -1,13 +1,20 @@
 ember-cache-primitive-polyfill
 ==============================================================================
 
-[Short description of the addon.]
+Polyfills Ember's [cache primitive API](https://github.com/emberjs/rfcs/blob/master/text/0615-autotracking-memoization.md).
 
+```js
+import {
+  createCache,
+  getValue,
+  isConst
+} from '@glimmer/tracking/primitives/cache';
+```
 
 Compatibility
 ------------------------------------------------------------------------------
 
-* Ember.js v3.12 or above
+* Ember.js v3.13 or above
 * Ember CLI v2.13 or above
 * Node.js v10 or above
 
@@ -18,12 +25,6 @@ Installation
 ```
 ember install ember-cache-primitive-polyfill
 ```
-
-
-Usage
-------------------------------------------------------------------------------
-
-[Longer description of how to use the addon in apps.]
 
 
 Contributing
