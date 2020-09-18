@@ -18,6 +18,11 @@ module.exports = {
       throw new SilentError('ember-cache-primitive-polyfill requires ember-cli-babel@7.20.0 or higher in order to function properly, please update your ember-cli-babel version');
     }
 
+    let glimmerTrackingVersion = parentChecker.for('@glimmer/tracking');
+    if (glimmerTrackingVersion.lt('1.0.2')) {
+      this.ui.writeWarnLine(`Using ${this.name} with \`@glimmer/tracking\` versions prior to 1.0.2 may not work correctly, please update to at least \`@glimmer/tracking@1.0.2\``);
+    }
+
     const projectChecker = new VersionChecker(this.project);
     const emberVersion = projectChecker.for('ember-source');
 
