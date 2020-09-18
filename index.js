@@ -1,5 +1,6 @@
 'use strict';
 
+const SilentError = require('silent-error');
 const VersionChecker = require('ember-cli-version-checker');
 const NATIVE_SUPPORT_VERSION = '3.22.0-alpha.1';
 let hasBeenWarned = false;
@@ -10,8 +11,15 @@ module.exports = {
   included() {
     this._super.included.apply(this, arguments);
 
-    const checker = new VersionChecker(this);
-    const emberVersion = checker.for('ember-source');
+    const parentChecker = new VersionChecker(this.parent);
+    const babelVersion = parentChecker.for('ember-cli-babel');
+
+    if (babelVersion.lt('7.20.0')) {
+      throw new SilentError('ember-cache-primitive-polyfill requires ember-cli-babel@7.20.0 or higher in order to function properly, please update your ember-cli-babel version');
+    }
+
+    const projectChecker = new VersionChecker(this.project);
+    const emberVersion = projectChecker.for('ember-source');
 
     if (emberVersion.lt(NATIVE_SUPPORT_VERSION)) {
       this.import('vendor/ember-cache-primitive-polyfill.js');
