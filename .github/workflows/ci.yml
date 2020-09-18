@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    # filtering branches here prevents duplicate builds from pull_request and push
+    branches:
+      - master
+      - "v*"
+    # always run CI for tags
+    tags:
+      - "*"
+
+  # early issue detection: run CI weekly on Sundays
+  schedule:
+    - cron: "0 6 * * 0"
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+      - name: Browser Tests
+        run: yarn test:ember
+
+  test-floating-dependencies:
+    name: Floating Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Browser Tests
+        run: yarn test:ember
+
+  test-try:
+    name: "Ember Try ${{ matrix.scenario }}"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scenario:
+          - 3.13
+          - lts-3.16
+          - lts-3.20
+          - release
+          - beta
+          - canary
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Try Scenario
+        run: yarn ember try:one ember-${{ matrix.scenario }}
