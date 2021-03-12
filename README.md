@@ -49,14 +49,14 @@ class Person {
 let person = new Person();
 
 console.log(person.fullName); // Jen Weber
-console.log(count); // 1;
+console.log(computeCount); // 1;
 console.log(person.fullName); // Jen Weber
-console.log(count); // 1;
+console.log(computeCount); // 1;
 
 person.firstName = 'Jennifer';
 
 console.log(person.fullName); // Jennifer Weber
-console.log(count); // 2;
+console.log(computeCount); // 2;
 ```
 
 Contributing
